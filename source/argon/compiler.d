@@ -8,36 +8,39 @@ import std.conv;
 import argon.ast;
 import argon.parser;
 
-void renderArgonTemplate(Writer, string file, Args...)(Writer output)
+template renderArgonTemplate(string file, Args...)
 {
-	enum mainTemplate = compileArgonTemplate!file();
-	enum includeTemplates = compileArgonIncludeTemplates!(mainTemplate[1])() ~ mainTemplate;
-
-    void delegate()[string] file_table;
-
-    auto get_namespace(string namespace)()
-    {
-    	static foreach(i, Arg; Args)
-    		static if (__traits(compiles, Arg == namespace) && Arg == namespace)
-    			return Args[i+1];
-    }
-
-	auto register_file(string fileName)(void delegate() func)
-    {
-        file_table[fileName] = func;
-    }
-
-    auto do_file(string fileName)()
-    {
-        file_table[fileName]();
-    }
-
-	static foreach(includeTemplate; includeTemplates)
+	auto renderArgonTemplate(Writer)(ref Writer output)
 	{
-		mixin(includeTemplate[0]);
-	}
+		enum mainTemplate = compileArgonTemplate!file();
+		enum includeTemplates = compileArgonIncludeTemplates!(mainTemplate[1])() ~ mainTemplate;
 
-	do_file!file();
+	    void delegate()[string] file_table;
+
+	    auto get_namespace(string namespace)()
+	    {
+	    	static foreach(i, Arg; Args)
+	    		static if (__traits(compiles, Arg == namespace) && Arg == namespace)
+	    			return Args[i+1];
+	    }
+
+		auto register_file(string fileName)(void delegate() func)
+	    {
+	        file_table[fileName] = func;
+	    }
+
+	    auto do_file(string fileName)()
+	    {
+	        file_table[fileName]();
+	    }
+
+		static foreach(includeTemplate; includeTemplates)
+		{
+			mixin(includeTemplate[0]);
+		}
+
+		do_file!file();
+	}
 }
 
 private alias ArgonTemplate = Tuple!(string, string[]);
@@ -136,8 +139,8 @@ final class ArgonCompiler : ASTVisitor
 			else if (call == "[#]")
 			{
 				auto idString = format("%s:%-(%s.%)", node.namespace, node.callChain[0..i]);
-				identifier = Appender!string();
-				identifier.formattedWrite("list_%s", idString);
+				identifier = Appender!string.init;
+				identifier.formattedWrite("list_%s", listElementDict[idString]);
 			}
 			else
 			{

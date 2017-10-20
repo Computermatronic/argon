@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+  {include="head.argon"}
+  <body>
+    <h1>{element=content:hello_world}</h1>
+    <ul>
+    {list=content:list}
+      <li>list index: '{element=content:list[#]}', list value: '{element=content:list[$]}'</li>
+    {/list}
+    </ul>
+  </body>
+ </html>
