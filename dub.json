@@ -1,0 +1,10 @@
+{
+	"name": "argon",
+	"authors": [
+		"Sean Campbell"
+	],
+	"description": "Argon html template rendering library.",
+	"copyright": "Copyright © 2017, Sean Campbell",
+	"license": "proprietary",
+	"stringImportPaths": ["templates/"]
+}
