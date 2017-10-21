@@ -3,7 +3,7 @@ Argon is a simple compiled HTML text macro language, with a focus on minimalism 
 Argon is simple to use, in that it is does not try to abstract over HTML syntax, rather it provides a simple to use text interpolation system, which can easily integrate into existing data structures.
 
 ## Features:
-* Namespaces - All elements require a namespace to access a data structure from, so it is easy to put multiple datastructures in one page.
+* Namespaces - All elements require a namespace to access a data structure from, so it is easy to put multiple data structures in one page.
 * Lists - Lists allow for iteration over data structures which can be iterated with `foreach`, along with arbitrary bits of HTML, other elements and nested lists.
 * Compiled - Argon templates compile down to D code, for maximum efficiency.
 * Includes - Argon templates can include each other, and included templates have full access to all of the main templates namespaces.
