@@ -10,29 +10,38 @@ import argon.parser;
 
 template renderArgonTemplate(string file, Args...)
 {
-	auto renderArgonTemplate(Writer)(ref Writer output)
+	auto renderArgonTemplate(Writer)(auto ref Writer writer)
 	{
+		static if (__traits(compiles, writer.bodyWriter))
+		{
+			auto output = writer.bodyWriter;
+		}
+		else
+		{
+			auto output = writer;
+		}
+		
 		enum mainTemplate = compileArgonTemplate!file();
 		enum includeTemplates = compileArgonIncludeTemplates!(mainTemplate[1])() ~ mainTemplate;
 
-	    void delegate()[string] file_table;
+		void delegate()[string] file_table;
 
-	    auto get_namespace(string namespace)()
-	    {
-	    	static foreach(i, Arg; Args)
-	    		static if (__traits(compiles, Arg == namespace) && Arg == namespace)
-	    			return Args[i+1];
-	    }
+		auto get_namespace(string namespace)()
+		{
+			static foreach(i, Arg; Args)
+				static if (__traits(compiles, Arg == namespace) && Arg == namespace)
+					return Args[i+1];
+		}
 
 		auto register_file(string fileName)(void delegate() func)
-	    {
-	        file_table[fileName] = func;
-	    }
+		{
+			file_table[fileName] = func;
+		}
 
-	    auto do_file(string fileName)()
-	    {
-	        file_table[fileName]();
-	    }
+		auto do_file(string fileName)()
+		{
+			file_table[fileName]();
+		}
 
 		static foreach(includeTemplate; includeTemplates)
 		{
