@@ -1,5 +1,5 @@
 import std.stdio;
-import argon.compiler;
+import argon.argon;
 
 struct Content
 {

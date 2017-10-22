@@ -39,7 +39,7 @@ The Following is an example of how to use an Argon template. See the examples di
 ### test.d:
 ```d
 import std.stdio;
-import argon.compiler;
+import argon.argon;
 
 struct Content
 {
