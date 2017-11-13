@@ -93,7 +93,7 @@ ASTIdentifierNode parseArgonIdentifier(ParserState state)
 	while(state.peek().isAlphaNum() || state.peek() == '_')
 		node.namespace ~= state.pop();
 	state.expect(":");
-	while(state.peek().isAlphaNum() || state.peek() == '_')
+	while(state.peek().isAlphaNum() || state.peek() == '_' || state.peek() == '[' || state.peek() == '.')
 	{
 		node.callChain[$-1] ~= state.pop();
 		if (state.peek() == '.')
